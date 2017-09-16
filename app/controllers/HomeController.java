@@ -1,5 +1,6 @@
 package controllers;
 
+import actors.MessageActor;
 import play.mvc.*;
 
 import views.html.*;
@@ -20,6 +21,11 @@ public class HomeController extends Controller
     public Result index() 
     {
         return ok(views.html.index.render()); //Views is the package, html is the template, index is a member in views, render () is a method called on this, with injected values
+    }
+
+    public LegacyWebSocket<String> chatSocket() //deprecated - will not be supported in the future versions.
+    {
+        return WebSocket.withActor(MessageActor::props);
     }
 
 }
