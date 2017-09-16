@@ -4,7 +4,7 @@ app.controller('chatController', function ($scope, $sce)
 {
 	$scope.messages = [];
 
-    var  exampleSocket =  new  WebSocket("ws://localhost:9000/chatSocket"); //wss - web socket secure
+    var  exampleSocket =  new  WebSocket("wss://swiftcode-couchpotato.herokuapp.com/chatSocket"); //wss - web socket secure
     exampleSocket.onmessage = function (event)
     {
         var jsonData = JSON.parse(event.data);
