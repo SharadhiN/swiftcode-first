@@ -12,42 +12,43 @@ import services.FeedService;
 import java.util.Objects;
 import java.util.UUID;
 
-public class MessageActor extends UntypedActor
-{
-    public static Props props(ActorRef out) //Properties of actor
-    {
-        return Props.create(MessageActor.class, out);
-    }
+public class MessageActor extends UntypedActor {
+   private final ActorRef out;
 
-    private final ActorRef out;
-    private FeedService feedService = new FeedService();
-    private AgentService agentService = new AgentService();
 
-    public MessageActor(ActorRef out)
-    {
-        this.out = out;
-    }
+   public static Props props(ActorRef out)
+   {
+       return Props.create(MessageActor.class, out);
+   }
 
-    @Override
-    public void onReceive(Object message) throws Exception
-    {
-        ObjectMapper mapper = new ObjectMapper();
-        Message messageObject = new Message();
-        if(message instanceof Object)
-        {
-            messageObject.text = (String) message;
-            messageObject.sender = Message.Sender.USER;
-            out.tell(mapper.writeValueAsString(messageObject),
-                    self());
-            String keyword = String.valueOf(agentService.getAgentResponse((String) message));
-            if(!Objects.equals(keyword, "NOT_FOUND"))
-            {
-                FeedResponse feedResponse = feedService.getFeedResponse(keyword);
-                messageObject.text = (feedResponse.title == null) ? "No results found" : "Showing results for: " + keyword;
-                messageObject.feedResponse = feedResponse;
-                messageObject.sender = Message.Sender.BOT;
-                out.tell(mapper.writeValueAsString(messageObject), self());
-            }
-        }
-    }
+   private FeedService feedService = new FeedService();
+   private AgentService newsAgentService = new AgentService();
+
+   public MessageActor(ActorRef out)
+   {
+       this.out = out;
+   }
+
+
+   @Override public void onReceive(Object message) throws Exception {
+
+       ObjectMapper mapper = new ObjectMapper();             //ObjectMapper, untyped actor are all from PLAY library.
+       Message messageObject = new Message();
+       if (message instanceof Object) {
+           messageObject.text = (String) message;
+           messageObject.sender = Message.Sender.USER;
+           out.tell(mapper.writeValueAsString(messageObject),
+                   self());
+           String keyword = newsAgentService.getAgentResponse((String) message).keyword;
+           if(!Objects.equals(keyword, "NOT_FOUND")){
+               FeedResponse feedResponse = feedService.getFeedResponse(keyword);
+               messageObject.text = (feedResponse.title == null) ? "No results found" : "Showing results for: " + keyword;
+               messageObject.feedResponse = feedResponse;
+               messageObject.sender = Message.Sender.BOT;
+               out.tell(mapper.writeValueAsString(messageObject), self());
+           }
+       }
+
+   }
+
 }

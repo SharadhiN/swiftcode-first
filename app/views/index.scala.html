@@ -7,16 +7,16 @@
 	</head>
 	<body ng-app = "chatApp" ng-controller = "chatController" layout = "row" layout-align = "center stretch"> <!--ng - angular-->
 		<md-card flex="none" layout="column">
-    	  <md-content flex="90" id="message-pane" style="width:450px;
+    	  <md-content flex="90" id="message-pane" style="width:480px;
     		background:url(http://www.lgg3wallpaper.com/wp-content/uploads/Abstract/Abstract%20LG%20G3%20Wallpapers%2097.jpg);
     		background-repeat:no-repeat;
     		background-size:cover;
     		background-position:right bottom">
         <div ng-repeat = "message in messages" layout="column" layout-align="{{message.sender=='BOT' ? 'start start' : 'start end'}}">
-            <md-card style = "max-width:75%; border-radius:10px; padding:10px; font-size:14px;" ng-style="message.sender=='BOT'?{'background-color':'#b8d2d3'}:{'background-color':'#88bff7'}">
+            <md-card style = "max-width:78%; border-radius:10px; padding:10px; font-size:14px;" ng-style="message.sender=='BOT'?{'background-color':'#b8d2d3'}:{'background-color':'#88bff7'}">
               <span>{{message.text}}</span>
               <span ng-bind-html = "trust(message.feedResponse.description)">{{message.feedResponse.description}}</span>
-              <span style="margin-top: 4px; float: right; color: #666666 ; font-size: 10px;"> {{message.time}} </span>
+              <spanved style="margin-top: 4px; float: right; color: #666666 ; font-size: 10px;"> {{message.time}} </span>
             </md-card>
         </div> 
         </md-content>
